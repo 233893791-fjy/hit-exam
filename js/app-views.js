@@ -622,4 +622,3 @@ APP.showAbout = function() {
 
 // 应用启动
 document.addEventListener('DOMContentLoaded', function() { APP.init(); });
-*** End of File
