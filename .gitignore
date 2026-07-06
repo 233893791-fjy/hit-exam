@@ -1,0 +1,16 @@
+# 部署配置
+vercel.json
+load.html
+index.html
+deploy-index.html
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 数据缓存
+data/sync-data.json
+data/kaoyan-agent-ref/
+data/github-search.json
+data/kaoyan-agent-readme.json
+*** End of File
