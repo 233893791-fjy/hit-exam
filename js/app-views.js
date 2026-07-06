@@ -683,7 +683,6 @@ APP.addSelectedToMyBank = function() {
   alert('成功加入 '+n+' 题！');
   APP.updateStatusStats();
 };
-APP.renderExamPool = function() {
   var sub = document.getElementById('epSubject').value;
   var yr = document.getElementById('epYear').value;
   var qs = [];
@@ -731,7 +730,6 @@ APP.renderExamPool = function() {
   });
 };
 
-APP.addSelectedToMyBank = function() {
   var sub = document.getElementById('epSubject').value;
   var yr = document.getElementById('epYear').value;
   var allQs = [];
@@ -779,7 +777,6 @@ APP.addSelectedToMyBank = function() {
   APP.renderExamPool();
 };
 
-APP.renderExamPool = function() {
   var sub = document.getElementById('epSubject').value;
   var yr = document.getElementById('epYear').value;
   var qs = sub ? getExamQuestions('kaoyan', sub) : [];
