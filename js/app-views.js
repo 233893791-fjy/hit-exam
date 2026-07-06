@@ -599,6 +599,48 @@ APP.clearAllData = function() {
   }
 };
 
+APP.showExamPool = function() {
+  APP.setTitle('历年真题');
+  var body = document.getElementById('pageBody');
+  body.innerHTML = '<div class=\"filter-bar\">' +
+    '<select id=\"epSubject\" class=\"form-input form-select\" style=\"flex:1\" onchange=\"APP.renderExamPool()\">' +
+    "<option value=''>全部科目</option>" +
+    getExamSubjects('kaoyan').map(function(s){return '<option value=\"'+s+'\">'+s+'</option>';}).join('') +
+    '</select>' +
+    '<select id=\"epYear\" class=\"form-input form-select\" style=\"flex:1\" onchange=\"APP.renderExamPool()\">' +
+    '<option value=\"\">全部年份</option></select>' +
+    '<button class=\"btn btn-primary btn-sm\" onclick=\"APP.renderExamPool()\">查询</button>' +
+  '</div><div id=\"examPoolList\"></div>';
+  APP.renderExamPool();
+};
+
+APP.renderExamPool = function() {
+  var sub = document.getElementById('epSubject').value;
+  var yr = document.getElementById('epYear').value;
+  var qs = sub ? getExamQuestions('kaoyan', sub) : [];
+  if (!sub) {
+    var all = [];
+    getExamSubjects('kaoyan').forEach(function(s){all=all.concat(getExamQuestions('kaoyan',s));});
+    qs = all;
+  }
+  if (yr) qs = qs.filter(function(q){return q.year==yr;});
+  var container = document.getElementById('examPoolList');
+  if (qs.length==0) {
+    container.innerHTML = '<div class=\"empty-state\"><p>暂无真题数据</p></div>'; return;
+  }
+  qs.sort(function(a,b){return b.year-a.year;});
+  container.innerHTML = qs.map(function(q){
+    var opts = q.o ? q.o.map(function(o){return '<div class=\"q-option'+'">'+APP.renderInlineFormula(o)+'</div>';}).join('') : '';
+    return '<div class=\"question-card\">' +
+      '<div class=\"q-header\"><span class=\"q-badge year-badge\">'+q.year+'</span><span class=\"q-badge exam-badge\">'+sub+'</span></div>' +
+      '<div class=\"q-text\">'+APP.renderInlineFormula(q.q)+'</div>' +
+      '<div class=\"q-options\">'+opts+'</div>' +
+      '<div class=\"q-answer-info\"><span class=\"q-correct-answer\">答案：'+q.a+'</span></div>' +
+      (q.an ? '<button class=\"btn btn-ghost btn-sm q-expand-btn\" onclick=\"this.parentNode.classList.toggle('expanded');this.textContent=this.parentNode.classList.contains('expanded')?'收起':'展开'\">展开解析</button><div class=\"q-details\">'+APP.renderInlineFormula(q.an)+(q.mem?'<div class=\"memory-box mt-8\">'+q.mem+'</div>':'')+'</div>' : '') +
+    '</div>';
+  }).join('');
+};
+
 APP.showAbout = function() {
   APP.setTitle('\u5173\u4E8E');
   var body = document.getElementById('pageBody');
