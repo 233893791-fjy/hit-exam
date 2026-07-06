@@ -75,6 +75,7 @@ var APP = {
       case 'sub-notes': APP.showNotes(); break;
       case 'sub-mindmap': APP.showMindMap(); break;
       case 'sub-settings': APP.showSettings(); break;
+      case 'sub-exam-pool': APP.showExamPool(); break;
       case 'sub-about': APP.showAbout(); break;
       default: APP.showDashboard();
     }
