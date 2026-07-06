@@ -602,6 +602,108 @@ APP.clearAllData = function() {
 APP.showExamPool = function() {
   APP.setTitle('历年真题');
   var body = document.getElementById('pageBody');
+  body.innerHTML =
+    '<div class="filter-bar">' +
+      '<select id="epSubject" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:14px" onchange="APP.renderExamPool()">' +
+        '<option value="">全部科目</option>' +
+        getExamSubjects('kaoyan').map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join('') +
+      '</select>' +
+      '<select id="epYear" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:14px" onchange="APP.renderExamPool()">' +
+      '<option value="">全部年份</option></select>' +
+      '<button class="btn btn-primary btn-sm" onclick="APP.renderExamPool()">查询</button>' +
+    '</div>' +
+    '<div id="examPoolList"></div>' +
+    '<div id="examPoolActions" style="position:sticky;bottom:0;background:var(--bg-card);padding:10px;border-top:1px solid var(--border);margin-top:10px;display:none">' +
+      '<button class="btn btn-primary btn-lg" onclick="APP.addSelectedToMyBank()">加入选中题目到我的题库</button>' +
+      '<span id="selectedCount" style="margin-left:8px;font-size:13px;color:var(--text-muted)">已选 0 题</span>' +
+    '</div>';
+  document.getElementById('epSubject').onchange();
+};
+
+APP.renderExamPool = function() {
+  var sub = document.getElementById('epSubject').value;
+  var yr = document.getElementById('epYear').value;
+  var qs = [];
+  if (sub) { qs = getExamQuestions('kaoyan', sub); }
+  else {
+    var subs = getExamSubjects('kaoyan');
+    subs.forEach(function(s){ qs = qs.concat(getExamQuestions('kaoyan',s)); });
+  }
+  if (yr) qs = qs.filter(function(q){return q.year==parseInt(yr);});
+  qs.sort(function(a,b){return b.year-a.year;});
+  var container = document.getElementById('examPoolList');
+  if (qs.length==0) { container.innerHTML='<div class="empty-state"><p>暂无真题数据</p></div>'; return; }
+  container.innerHTML = qs.map(function(q,i){
+    var opts = q.o ? q.o.map(function(o){return '<div class="q-option">'+APP.renderInlineFormula(o)+'</div>';}).join('') : '';
+    return '<div class="question-card">' +
+      '<label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer">' +
+        '<input type="checkbox" class="ep-checkbox" data-idx="'+i+'" style="width:18px;height:18px">' +
+        '<span class="q-badge year-badge">'+q.year+'</span>' +
+        '<span class="q-badge exam-badge">'+sub+'</span>' +
+      '</label>' +
+      '<div class="q-text">'+APP.renderInlineFormula(q.q)+'</div>' +
+      '<div class="q-options">'+opts+'</div>' +
+      '<div class="q-answer-info"><span class="q-correct-answer">答案：'+q.a+'</span></div>' +
+      (q.an && q.mem ? '<button class="btn btn-ghost btn-sm" onclick="var c=this.parentNode;c.classList.toggle('+"'expanded'"+');this.textContent=c.classList.contains('+"'expanded'"+')?'+"'收起'"+':'+"'查看解析'"+'">查看解析</button>' : '') +
+      '<div class="q-details">' +
+        (q.an ? '<div class="q-section"><strong>解析：</strong>'+APP.renderInlineFormula(q.an)+'</div>' : '') +
+        (q.mem ? '<div class="q-section memory-box mt-8"><strong>记忆方式：</strong>'+APP.renderInlineFormula(q.mem)+'</div>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+  // Update year dropdown
+  var years = {};
+  qs.forEach(function(q){years[q.year]=1;});
+  var yrSel = document.getElementById('epYear');
+  yrSel.innerHTML = '<option value="">全部年份</option>' + Object.keys(years).sort().reverse().map(function(y){return '<option value="'+y+'">'+y+'</option>';}).join('');
+  if (yr) yrSel.value = yr;
+  // Show actions bar
+  document.getElementById('examPoolActions').style.display = 'block';
+  // Bind checkbox events
+  document.querySelectorAll('.ep-checkbox').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      var checked = document.querySelectorAll('.ep-checkbox:checked').length;
+      document.getElementById('selectedCount').textContent = '已选 '+checked+' 题';
+    });
+  });
+};
+
+APP.addSelectedToMyBank = function() {
+  var sub = document.getElementById('epSubject').value;
+  var yr = document.getElementById('epYear').value;
+  var allQs = [];
+  if (sub) { allQs = getExamQuestions('kaoyan', sub); }
+  else {
+    getExamSubjects('kaoyan').forEach(function(s){allQs = allQs.concat(getExamQuestions('kaoyan',s));});
+  }
+  if (yr) allQs = allQs.filter(function(q){return q.year==parseInt(yr);});
+  var checkboxes = document.querySelectorAll('.ep-checkbox:checked');
+  if (checkboxes.length===0) { alert('请先勾选题目'); return; }
+  var added = 0;
+  checkboxes.forEach(function(cb){
+    var idx = parseInt(cb.dataset.idx);
+    var q = allQs[idx];
+    if (q) {
+      DATA.addQuestion({
+        subject: document.getElementById('epSubject').value || '真题',
+        questionText: q.q,
+        options: q.o || [],
+        correctAnswer: q.a,
+        analysis: q.an || '',
+        memoryTip: q.mem || '',
+        year: String(q.year),
+        isWrong: true
+      });
+      added++;
+    }
+  });
+  alert('成功加入 '+added+' 题到你的题库！');
+  APP.updateStatusStats();
+};
+
+ {
+  APP.setTitle('历年真题');
+  var body = document.getElementById('pageBody');
   body.innerHTML = '<div class=\"filter-bar\">' +
     '<select id=\"epSubject\" class=\"form-input form-select\" style=\"flex:1\" onchange=\"APP.renderExamPool()\">' +
     "<option value=''>全部科目</option>" +
