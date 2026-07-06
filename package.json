@@ -1,0 +1,13 @@
+{
+  "name": "hit-exam-assistant",
+  "version": "1.0.0",
+  "description": "哈工大考研助手 - 专注哈尔滨工业大学考研备考，支持错题收集、图片识别、公式渲染、思维导图、刷题模式",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["考研", "哈工大", "信号与系统", "数学", "备考"],
+  "license": "MIT"
+}
+*** End of File
