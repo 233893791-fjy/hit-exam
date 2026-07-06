@@ -145,4 +145,3 @@
 
   console.log('\u5DF2\u81EA\u52A8\u52A0\u8F7D ' + samples.length + ' \u9053\u793A\u4F8B\u9898\u76EE');
 })();
-*** End of File
