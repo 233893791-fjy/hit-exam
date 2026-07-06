@@ -1,0 +1,18 @@
+{
+  "name": "\u54C8\u5DE5\u5927\u8003\u7814\u52A9\u624B",
+  "short_name": "\u8003\u7814\u52A9\u624B",
+  "description": "\u4E13\u6CE8\u54C8\u5C14\u6EE8\u5DE5\u4E1A\u5927\u5B66\u8003\u7814\u5907\u8003\uFF0C\u652F\u6301\u9519\u9898\u6536\u96C6\u3001\u56FE\u7247\u8BC6\u522B\u3001\u516C\u5F0F\u6E32\u67D3\u3001\u601D\u7EF4\u5BFC\u56FE\u3001\u5237\u9898\u6A21\u5F0F",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#1e3a5f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='30' fill='%231d4ed8'/%3E%3Ctext x='96' y='125' text-anchor='middle' fill='white' font-size='100' font-weight='bold'%3EH%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+*** End of File
