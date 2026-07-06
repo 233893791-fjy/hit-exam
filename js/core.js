@@ -55,7 +55,7 @@ var APP = {
   },
   showAdd: function() {
     document.getElementById("add").innerHTML =
-      '<div class="card"><form id="af" onsubmit="return APP.handleAdd(event)">' +
+      '<div class="card" style="text-align:center;cursor:pointer;padding:24px" onclick="EXT.triggerUpload()"><div style="font-size:40px;margin-bottom:8px">📷</div><div style="font-size:14px;color:#6b7280">点击上传截图/图片</div><input type="file" accept="image/*" style="display:none" id="ocrInput" onchange="EXT.handleFile(event)"></div><div id="ocrPreviewArea" style="display:none" class="card"><img id="ocrPreview" style="width:100%;max-height:250px;object-fit:contain;border-radius:6px"><div id="ocrStatus" style="font-size:13px;color:#6b7280;margin-top:6px">等待识别</div><div id="ocrResult" style="display:none;margin-top:6px"><div style="font-size:12px;color:#9ca3af">识别结果：</div><div id="ocrText" style="font-size:14px;background:#f8fafc;padding:8px;border-radius:4px;margin-top:4px"></div></div></div><div class="card"><form id="af" onsubmit="return APP.handleAdd(event)">' +
       '<div class="mb"><label class="lb">\u79d1\u76ee</label><select id="sub">' +
       DB.cur().subs.map(function(s) { return '<option value="' + s + '">' + s + '</option>'; }).join("") + '</select></div>' +
       '<div class="mb"><label class="lb">\u9898\u76ee</label><textarea id="qt" rows="3" placeholder="\u8f93\u5165\u9898\u76ee\u5185\u5bb9..."></textarea></div>' +
